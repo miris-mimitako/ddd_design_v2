@@ -1,0 +1,71 @@
+# ubiquitous language template
+domains:
+  - domain_name: User
+    terms:
+      - id: TERM-001
+        canonical: ユーザー
+        definition: 本システムに登録され、認証および業務処理の対象となる主体。
+        aliases:
+          allowed:
+            - user
+          disallowed:
+            - 会員
+            - 顧客
+        context_notes:
+          - UI、会話、コード上で同じ意味で使う。
+        mappings:
+          code:
+            - User
+          ui:
+            - ユーザー
+          db:
+            - users
+        related_rules:
+          - BR-001
+          - BR-002
+
+      - id: TERM-002
+        canonical: 年齢確認済み
+        definition: 業務上必要な年齢条件を満たすと判定された状態。
+        aliases:
+          allowed:
+            - age_verified
+          disallowed:
+            - 成人
+        context_notes:
+          - 法的成人と同義ではない可能性があるため、意味を固定する。
+        mappings:
+          code:
+            - AgeVerified
+          ui:
+            - 年齢確認済み
+        related_rules:
+          - BR-001
+
+      - id: TERM-003
+        canonical: メールアドレス
+        definition: ユーザー識別および通知送信に利用する連絡先。
+        aliases:
+          allowed:
+            - email
+            - email_address
+          disallowed:
+            - ログインID
+        context_notes:
+          - ログイン識別子と常に同一とは限らない。
+        mappings:
+          code:
+            - EmailAddress
+          ui:
+            - メールアドレス
+          db:
+            - users.email
+        related_rules:
+          - BR-002
+
+metadata:
+  writing_policy:
+    - 用語の意味を固定する。
+    - 同義語の禁止を明示する。
+    - UI 名、コード名、DB 名の対応は書いてよい。
+    - 振る舞いそのものは書かない。

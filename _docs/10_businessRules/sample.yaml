@@ -1,0 +1,41 @@
+# business rules template
+domains:
+  - domain_name: User
+    rules:
+      - id: BR-001
+        rule: ユーザーは18歳以上でなければ登録できない。
+        reason: 年齢制限対象サービスのため、未成年登録を防ぐ必要がある。
+        exception:
+          - 法令または業務上の特例がある場合は別途定義する。
+        related_terms:
+          - TERM-001
+          - TERM-002
+        related_use_cases:
+          - UC-001
+        related_tests:
+          - T-DOMAIN-USER-001
+          - T-APPLICATION-USER-001
+        notes:
+          - UI の入力制御ではなく業務ルールとして扱う。
+          - 具体的な境界値の検証はテストで表現する。
+
+      - id: BR-002
+        rule: 既に登録済みのメールアドレスでは新規登録できない。
+        reason: 本人性と通知整合性を維持するため。
+        exception:
+          - 退会後の再登録可否は別ルールで定義する。
+        related_terms:
+          - TERM-003
+        related_use_cases:
+          - UC-001
+        related_tests:
+          - T-DOMAIN-USER-002
+          - T-APPLICATION-USER-002
+        notes:
+          - repository の参照方法や DB 制約名はここに書かない。
+
+metadata:
+  writing_policy:
+    - ここには意図、制約、例外、関連先だけを書く。
+    - 正常系、異常系、境界値の振る舞いはテストへ寄せる。
+    - SQL、ORM、API 都合は書かない。

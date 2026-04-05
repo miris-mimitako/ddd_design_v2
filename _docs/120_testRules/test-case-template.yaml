@@ -1,0 +1,59 @@
+# test case template
+test_cases:
+  - id: T-DOMAIN-USER-001
+    layer: DOMAIN
+    topic: User
+    title: 18歳以上のユーザーは登録条件を満たす
+    verifies:
+      business_rules:
+        - BR-001
+      terms:
+        - TERM-001
+        - TERM-002
+      use_cases:
+        - UC-001
+    purpose: 年齢制限ルールの正常系を振る舞いとして固定する。
+    preconditions:
+      - 18歳のユーザー情報が入力されている。
+      - 他の登録条件は満たしている。
+    action: ユーザー登録条件を判定する。
+    expected:
+      - 登録可能と判定される。
+      - 年齢条件違反のエラーは発生しない。
+    out_of_scope:
+      - UI の入力補助
+      - DB 保存確認
+    notes:
+      - 実装方法ではなく振る舞いだけを記述する。
+
+  - id: T-APPLICATION-USER-001
+    layer: APPLICATION
+    topic: UserRegistration
+    title: 新規登録時に重複メール確認後、保存に進む
+    verifies:
+      business_rules:
+        - BR-002
+      terms:
+        - TERM-003
+      use_cases:
+        - UC-001
+    purpose: ユースケースとしての処理順序と結果を固定する。
+    preconditions:
+      - 未登録のメールアドレスが入力されている。
+      - repository は検索可能である。
+    action: ユーザー登録ユースケースを実行する。
+    expected:
+      - メールアドレス重複なしと判定される。
+      - ユーザーが保存される。
+      - 結果が成功として返る。
+    out_of_scope:
+      - repository の SQL 実装詳細
+      - HTTP レスポンス形式
+    notes:
+      - 外部依存は fake / stub で差し替える。
+
+metadata:
+  writing_policy:
+    - テストケースは振る舞いを表現する。
+    - 意図や背景の説明は business rules 側へ寄せる。
+    - 実装都合の手順書にしない。
