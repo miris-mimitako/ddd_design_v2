@@ -49,6 +49,41 @@
 - 1項目に複数ルールを詰め込みすぎていないか
 - 読み手が判断を見失わない構成か
 
+### 8. Application が framework 非依存になっているか
+
+- Application が framework exception を import していないか
+- HTTP status 決定を Application が持っていないか
+- request / response 型を Application が知らないか
+
+### 9. primitive 排斥が境界まで維持されているか
+
+- Application input / output が無名 primitive へ崩れていないか
+- frontend の session / api response / view model が意味のない primitive 束になっていないか
+- 業務値の意味が型名または別名で保たれているか
+
+### 10. Domain UT が存在するか
+
+- Domain 実装の近傍に `*.spec.*` があるか
+- Application test だけで Domain の正しさを代用していないか
+- Domain の不変条件を直接検証できるか
+
+### 11. Storybook の粒度が適切か
+
+- Story が小さな component 単位から積み上がっているか
+- 複合 component だけで Story を済ませていないか
+- 内部 state を抱えた大きな component を最小単位として扱っていないか
+- 画面を構成する主要部品まで Story で辿れるか
+
+### 12. 自動差し戻し条件に該当していないか
+
+- `application/logic` に `@nestjs/` import がないか
+- `application/logic` に `infrastructure/logic` import がないか
+- `domain/logic` に framework import がないか
+- `domain/logic` に `*.spec.*` があるか
+- `tests/it/` が placeholder で埋まっていないか
+- `frontend/stories/` に `Input` `Button` `Field` 相当の Story があるか
+- `userId: string` のような業務値 primitive が Domain / Application に残っていないか
+
 ## 差し戻し基準
 
 次のどれかに当てはまる場合、差し戻し対象とする。
@@ -59,6 +94,12 @@
 - 技術実装の説明が中心になっている
 - 重要な例外条件が背景なしで書かれている
 - 更新しても影響範囲が追えない
+- Application が framework exception に依存している
+- primitive 排斥が Domain 入口で止まり、Application や frontend 境界で崩れている
+- Domain 実装に対する domain 近傍 UT が存在しない
+- Storybook が複合 component だけで構成され、小さな component 契約を確認できない
+- placeholder test しかない IT が置かれている
+- 自動差し戻し条件に該当しているのに完了扱いにしている
 
 ## レビューコメントの書き方
 
@@ -89,3 +130,8 @@
 - 用語の揺れがない
 - テストとの接続可能性がある
 - DDD と DIP の依存方向を壊していない
+- Application が framework 非依存である
+- primitive 排斥が Application / frontend 境界まで維持されている
+- Domain UT が domain 近傍に存在する
+- Storybook が小さな component 単位から積み上がっている
+- 自動差し戻し条件に 1 つも該当しない

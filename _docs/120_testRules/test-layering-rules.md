@@ -23,6 +23,12 @@
 
 - `backend/<domain>/domain/logic/...`
 
+必須条件:
+
+- Domain 実装を追加したら domain 近傍に `*.spec.*` を追加する
+- 値オブジェクト、エンティティ、集約のいずれかを直接検証する
+- Domain にテストが 0 件の状態で完了扱いにしない
+
 ## Application
 
 ここで確認するもの:
@@ -83,3 +89,4 @@
 - UI テストで業務仕様の正本を持たない
 - contract test を unit test の代わりに使わない
 - UT を `tests/it` や `tests/e2e` に混ぜない
+- Domain 実装を Application test だけで間接的にしか検証しない

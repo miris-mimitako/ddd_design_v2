@@ -24,9 +24,25 @@
 ## Storybook ルール
 
 - Story はコンポーネント単位で作成する
+- Story の基本単位は、小さな UI 契約を持つ表示部品とする
 - 画面全体の Story は作成しない
 - このプロジェクトで必要な UI ロジックは Story 上で確認する
 - 他プロジェクトでの再利用性は設計条件に含めない
+
+小さな UI 契約の例:
+
+- `Button`
+- `Input`
+- `Field`
+- `Card`
+- `StatusBadge`
+- `Dialog`
+
+複合 component の扱い:
+
+- `LoginForm` や `UserProfileCard` のような複合 component に Story を持つこと自体はよい
+- ただし、その内部に主要な表示責務が複数ある場合は、より小さな構成要素にも Story を持つ
+- Story があることを理由に、component の分解不足を正当化してはならない
 
 Story 上で確認するもの:
 
@@ -35,6 +51,7 @@ Story 上で確認するもの:
 - loading、disabled、error などの状態差分
 - UX 上必要な入力補助
 - イベント発火の結線
+- 小さな部品単位での見た目と契約
 
 Story 上で確認しないもの:
 
@@ -61,3 +78,5 @@ Story 上で確認しないもの:
 - 画面全体 Story を仕様の正本にする
 - UI 側で業務判定を増やす
 - 再利用性のためにこのプロジェクトの要件を曲げる
+- Story を持っているだけで component 分解が十分だとみなす
+- 内部 state を抱えた大きな component を Storybook の最小単位にする

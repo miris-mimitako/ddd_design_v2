@@ -101,6 +101,8 @@ callback は業務処理名ではなく、UI 操作として命名する。
 - Story は props 契約の確認場所として使う
 - 主要 props の状態差分ごとに Story を持つ
 - props 追加時は Story も更新する
+- 小さな component ほど props 契約が明確に読める状態を目指す
+- 内部 state が多い component は Story の最小単位として不適切かを見直す
 
 ## 禁止事項
 

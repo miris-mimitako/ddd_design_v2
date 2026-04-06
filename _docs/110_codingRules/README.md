@@ -56,6 +56,7 @@
 - トランザクション境界
 - port の呼び分け
 - 認可や監査の起点制御
+- Domain 例外や Application 例外の組み立て
 
 依存してよいもの:
 
@@ -66,6 +67,8 @@
 
 - infrastructure 実装クラスの直接生成
 - framework 固有 API への密結合
+- framework 例外の直接 throw
+- framework decorator や request/response 型の直接利用
 
 ### Infrastructure
 
@@ -231,6 +234,8 @@ Port の命名は、技術名ではなく業務上の役割で表現する。
 - Domain モデルに ORM annotation を付けない
 - Domain オブジェクトに framework base class を継承させない
 - Application で外部 SDK を直接 new しない
+- Application で framework exception を直接 throw しない
+- Application で framework request / response を直接扱わない
 - UI で業務判定 if を増やさない
 - Infrastructure で業務ルール分岐を増やさない
 
@@ -239,6 +244,8 @@ Port の命名は、技術名ではなく業務上の役割で表現する。
 - 業務ルール違反は Domain で表現する
 - ユースケース失敗は Application で扱う
 - 通信障害や永続化障害は Infrastructure で技術例外を吸収し、必要に応じて Application 向けへ変換する
+- HTTP status や framework exception への変換は interface 層で行う
+- Application は framework 非依存の例外型または結果型を返す
 
 ## DTO と変換
 
@@ -284,6 +291,8 @@ API で禁止すること:
 - 配列、辞書、文字列、数値などの標準型は、業務概念を包んだ型の内部実装としてのみ使う
 - DTO や永続化境界で一時的にプリミティブへ変換するのはよい
 - 変換責務は interface または infrastructure に置く
+- Application の public input / output でも、業務意味を持つ値は専用型へ変換して扱う
+- frontend でも session, api response, view model に業務値をそのまま primitive で保持しない
 
 ## 禁止事項
 
@@ -295,6 +304,23 @@ API で禁止すること:
 - OpenAPI を持たない公開 API を作る
 - DTO なしで API 境界を越える
 - 業務値を生の primitive のまま Domain に流し込む
+- Application で framework exception を投げる
+- frontend の session や view model に業務値を無名 primitive のまま保持する
+
+## 自動差し戻し条件
+
+次のどれかに当てはまる実装は、規約違反として差し戻す。
+
+- `application/logic` が `@nestjs/` を import している
+- `application/logic` が `infrastructure/logic` を import している
+- `domain/logic` が framework を import している
+- Domain / Application に `userId: string` などの業務値 primitive が残っている
+- `frontend/stories/` に `Input` `Button` `Field` 相当の Story がない
+
+備考:
+
+- これはレビュー時の主観判断ではなく、明示的な違反条件として扱う
+- 動作していても差し戻す
 
 ## 推奨ファイル
 
@@ -305,7 +331,15 @@ API で禁止すること:
 - `structure-rules.md`
 - `api-rules.md`
 - `type-rules.md`
+- `application-error-rules.md`
 - `ui-rules.md`
 - `props-rules.md`
 - `frontend-structure-rules.md`
 - `sample-directory-trees.md`
+
+## Reference Implementation
+
+Use the following sample when implementation details are ambiguous.
+The sample shows the intended connection between DDD layers, NestJS wiring, Astro pages, React components, Storybook granularity, and test placement.
+
+- [reference-login](D:/application/ddd_design_v2/_samples/reference-login/README.md)

@@ -41,6 +41,7 @@ frontend/
 - 表示コンポーネントを置く
 - props 契約に従って描画する
 - 状態差分に応じて見た目を切り替える
+- できる限り小さな UI 契約へ分解する
 
 ### 含めてよいもの
 
@@ -59,8 +60,16 @@ frontend/
 ### 例
 
 - `Button`
+- `TextInput`
+- `FieldLabel`
 - `UserForm`
 - `OrderSummaryCard`
+
+### 分解ルール
+
+- 1 component に複数の主要表示責務がある場合は分割を検討する
+- 入力欄、ラベル、ボタン、カード、ステータス表示などは独立した Story 候補として扱う
+- `Form` や `Panel` のような複合 component は、より小さな component を組み合わせて作る
 
 ## `stories/`
 
@@ -88,6 +97,9 @@ frontend/
 - 1 Story は 1 component の契約確認に集中する
 - props を増やしたら Story も更新する
 - Story で確認すべき状態差分を省略しない
+- Story の最小単位は、小さな UI 契約を持つ component を基本とする
+- 複合 component に Story を置く場合も、内部の主要 component が Story を持つか確認する
+- Story 一式を見たときに、画面を組み立てる最小部品まで辿れる状態にする
 
 ## `containers/`
 
@@ -162,12 +174,13 @@ frontend/
 ## 実装フロー
 
 1. 元 HTML から必要 component を洗い出す
-2. `components/` に部品を作る
+2. `components/` に小さな部品を作る
 3. `stories/` に状態差分を作る
-4. Story 上で描画と props 契約を確認する
-5. `containers/` でデータ接続する
-6. `pages/` へ配置する
-7. `tests/e2e/` で最終確認する
+4. 小さな部品を組み合わせて複合 component を作る
+5. Story 上で描画と props 契約を確認する
+6. `containers/` でデータ接続する
+7. `pages/` へ配置する
+8. `tests/e2e/` で最終確認する
 
 ## 命名ルール
 
@@ -189,3 +202,4 @@ frontend/
 - `pages/` で業務 if を増やす
 - `stories/` を画面統合テストの代わりに使う
 - `containers/` に汎用 UI 部品を作る
+- `Form` や `Panel` のような大きな塊だけに Story を持たせ、内部部品の Story を持たない
